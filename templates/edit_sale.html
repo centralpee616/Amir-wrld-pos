@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Sale</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+
+function updatePrices() {
+
+    const service =
+        document.getElementById("service").value;
+
+    const price =
+        document.getElementById("price");
+
+    const currentPrice =
+        "{{ sale.amount }}";
+
+    price.innerHTML = "";
+
+    if(service === "Kanak Kanak") {
+
+        price.innerHTML = `
+            <option value="10">RM10</option>
+            <option value="15">RM15</option>
+        `;
+    }
+
+    else if(service === "Remaja/Budak Sekolah") {
+
+        price.innerHTML = `
+            <option value="15">RM15</option>
+            <option value="20">RM20</option>
+            <option value="25">RM25</option>
+        `;
+    }
+
+    else if(service === "Dewasa") {
+
+        price.innerHTML = `
+            <option value="20">RM20</option>
+            <option value="25">RM25</option>
+            <option value="30">RM30</option>
+            <option value="35">RM35</option>
+        `;
+    }
+
+    for(let option of price.options){
+
+        if(option.value === currentPrice){
+
+            option.selected = true;
+
+        }
+
+    }
+
+}
+
+updatePrices();
+
+</script>
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+</div>
+
+<div class="form-container">
+
+    <h2 class="form-title">
+        Edit Transaction
+    </h2>
+
+    <form method="POST">
+
+        <div class="input-group">
+
+    <label>Service</label>
+
+    <select
+        name="service"
+        id="service"
+        required
+        onchange="updatePrices()">
+
+        <option value="Kanak Kanak"
+        {% if sale.service == 'Kanak Kanak' %}selected{% endif %}>
+            Kanak Kanak
+        </option>
+
+        <option value="Remaja/Budak Sekolah"
+        {% if sale.service == 'Remaja/Budak Sekolah' %}selected{% endif %}>
+            Remaja/Budak Sekolah
+        </option>
+
+        <option value="Dewasa"
+        {% if sale.service == 'Dewasa' %}selected{% endif %}>
+            Dewasa
+        </option>
+
+    </select>
+
+</div>
+
+        <div class="input-group">
+
+    <label>Price</label>
+
+    <select
+        name="amount"
+        id="price"
+        required>
+
+    </select>
+
+</div>
+
+        <div class="input-group">
+
+            <label>Barber</label>
+
+            <select name="barber">
+
+                {% for barber in barbers %}
+
+                <option
+                value="{{ barber.id }}"
+                {% if barber.id == sale.barber_id %}
+                selected
+                {% endif %}>
+
+                    {{ barber.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <button
+        class="save-btn"
+        type="submit">
+
+            Save Changes
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

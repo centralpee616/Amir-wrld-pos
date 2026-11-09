@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Receipt</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+
+<div class="receipt-container">
+
+    <div class="receipt-header">
+
+        <h1>AMIR WRLD</h1>
+
+        <p>Barbershop Receipt</p>
+
+    </div>
+
+    <hr>
+
+    <div class="receipt-row">
+        <span>Receipt No</span>
+        <span>{{ sale.receipt_no }}</span>
+    </div>
+
+    <div class="receipt-row">
+        <span>Date</span>
+        <span>{{ sale.date.strftime('%d/%m/%Y %H:%M') }}</span>
+    </div>
+
+    <div class="receipt-row">
+        <span>Service</span>
+        <span>{{ sale.service }}</span>
+    </div>
+
+    <div class="receipt-row">
+        <span>Barber</span>
+        <span>{{ sale.barber.name }}</span>
+    </div>
+
+    <div class="receipt-row">
+        <span>Payment Method</span>
+        <span>{{ sale.payment_method }}</span>
+    </div>
+
+    <div class="receipt-row total">
+
+        <span>Total</span>
+
+        <span>RM {{ sale.amount }}</span>
+
+    </div>
+
+    <hr>
+
+    <p class="thanks">
+        Thank You For Visiting
+    </p>
+
+    <div class="receipt-actions">
+
+        <a href="/" class="btn">
+            Dashboard
+        </a>
+
+        <button onclick="window.print()"
+        class="btn">
+
+            Print Receipt
+
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

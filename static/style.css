@@ -1,0 +1,507 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#000;
+    color:#fff;
+    font-family:'Segoe UI',sans-serif;
+    padding:20px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:3rem;
+    letter-spacing:10px;
+    font-weight:700;
+}
+
+.header p{
+    color:#888;
+    margin-top:10px;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #222;
+    border-radius:15px;
+    padding:15px;
+    min-height:120px;
+}
+
+.card-title{
+    font-size:0.8rem;
+    color:#999;
+    line-height:1.3;
+}
+
+.card-value{
+    font-size:1.8rem;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.actions{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.btn{
+    background:white;
+    color:black;
+    padding:16px 24px;
+    min-height:50px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+.btn:hover{
+    background:#ddd;
+}
+
+.transactions{
+    background:#111;
+    border:1px solid #222;
+    border-radius:15px;
+    padding:20px;
+}
+
+.transactions h2{
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    color:#999;
+    border-bottom:1px solid #333;
+}
+
+th,
+td{
+    padding:15px;
+    text-align:left;
+}
+
+tr{
+    border-bottom:1px solid #222;
+}
+
+tr:hover{
+    background:#181818;
+}
+
+@media(max-width:768px){
+
+    .header h1{
+        font-size:2rem;
+    }
+
+    .card-value{
+        font-size:1.5rem;
+    }
+
+    .btn{
+        width:100%;
+        text-align:center;
+    }
+}
+.form-container{
+    max-width:600px;
+    margin:auto;
+    background:#111;
+    padding:30px;
+    border-radius:15px;
+    border:1px solid #222;
+}
+
+.form-title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    color:#aaa;
+}
+
+input,
+select{
+    width:100%;
+    padding:14px;
+    background:#1a1a1a;
+    border:1px solid #333;
+    color:white;
+    border-radius:10px;
+    font-size:1rem;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#fff;
+}
+
+.save-btn{
+    width:100%;
+    background:white;
+    color:black;
+    border:none;
+    padding:15px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.save-btn:hover{
+    background:#ddd;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    color:white;
+    text-decoration:none;
+}
+
+.report-card{
+    background:#111;
+    border-radius:15px;
+    padding:20px;
+    border:1px solid #222;
+    margin-bottom:20px;
+}
+
+.report-name{
+    font-size:1.4rem;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.report-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.report-stat{
+    background:#1a1a1a;
+    padding:15px;
+    border-radius:10px;
+}
+.receipt-container{
+    max-width:700px;
+    margin:40px auto;
+    background:#111;
+    padding:40px;
+    border-radius:20px;
+    border:1px solid #333;
+}
+
+.receipt-header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.receipt-header h1{
+    font-size:3rem;
+    letter-spacing:8px;
+}
+
+.receipt-header p{
+    color:#888;
+    margin-top:10px;
+}
+
+.receipt-row{
+    display:flex;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #222;
+}
+
+.receipt-row span:first-child{
+    color:#999;
+}
+
+.total{
+    font-size:1.5rem;
+    font-weight:bold;
+}
+
+.thanks{
+    text-align:center;
+    margin-top:25px;
+    color:#aaa;
+}
+
+.receipt-actions{
+    margin-top:30px;
+    display:flex;
+    gap:15px;
+    justify-content:center;
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
+@media screen and (max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    .header h1{
+        font-size:2rem;
+        letter-spacing:4px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .card-value{
+        font-size:1.5rem;
+    }
+
+    .receipt-container{
+        padding:20px;
+    }
+}
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    background:#111;
+
+    border-top:1px solid #333;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    padding:15px 0;
+
+    z-index:1000;
+
+}
+
+.bottom-nav a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:0.9rem;
+
+    font-weight:bold;
+
+}
+
+body{
+    padding-bottom:90px;
+}
+.logo{
+    width:350px;
+    max-width:90%;
+    height:auto;
+
+    border-radius:15px;
+}
+
+.subtitle{
+    color:#888;
+    margin-top:10px;
+    letter-spacing:3px;
+}
+@media screen and (max-width:768px){
+
+    table{
+        font-size:0.8rem;
+    }
+
+    th,
+    td{
+        padding:8px;
+    }
+
+    td .btn{
+        display:block;
+        width:100%;
+        margin-bottom:5px;
+    }
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+.action-buttons{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+}
+
+.transaction-card{
+
+    background:#111;
+
+    border:1px solid #222;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+}
+
+.transaction-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+.amount-tag{
+
+    font-size:1.2rem;
+
+    font-weight:bold;
+
+    color:white;
+
+}
+
+.transaction-details{
+
+    margin-bottom:15px;
+
+}
+
+.transaction-details p{
+
+    margin:8px 0;
+
+    color:#ccc;
+
+}
+
+.transaction-buttons{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+
+    margin-top:15px;
+
+}
+
+.transaction-buttons .btn{
+
+    width:100%;
+
+    padding:8px 10px;
+
+    font-size:0.85rem;
+
+    text-align:center;
+
+    border-radius:8px;
+
+}
+
+@media screen and (max-width:768px){
+
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .card{
+        padding:12px;
+    }
+
+    .card-value{
+        font-size:1.6rem;
+    }
+
+    .logo{
+        width:100%;
+        max-width:320px;
+    }
+
+}
+
+@media screen and (max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    .stats-grid{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:12px;
+        width:100%;
+    }
+
+    .card{
+        width:100%;
+        min-height:auto;
+        padding:15px;
+    }
+
+    .card-value{
+        font-size:2rem;
+    }
+
+    .logo{
+        width:100%;
+        max-width:350px;
+    }
+
+}

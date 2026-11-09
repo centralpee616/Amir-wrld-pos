@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Reports</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+    <p>Commission Report</p>
+    <h2>
+        Report Date:
+        {{ selected_date }}
+    </h2>
+
+</div>
+
+{% for row in report_data %}
+
+<div class="report-card">
+
+    <div class="report-name">
+
+        {{ row.name }}
+
+    </div>
+
+   <div class="report-grid">
+
+    <div class="report-stat">
+
+        <small>Total Sales</small>
+
+        <h2>
+            RM {{ row.sales }}
+        </h2>
+
+    </div>
+
+    <div class="report-stat">
+
+        <small>Commission Earned</small>
+
+        <h2>
+            RM {{ row.commission }}
+        </h2>
+
+    </div>
+
+    <div class="report-stat">
+
+        <small>Haircuts</small>
+
+        <h2>
+            {{ row.cuts }}
+        </h2>
+
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+<a href="/"
+class="btn">
+
+    Dashboard
+
+</a>
+
+</body>
+
+</html>

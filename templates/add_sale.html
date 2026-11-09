@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Add Sale</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<script>
+
+function updatePrices() {
+
+    const service =
+        document.getElementById("service").value;
+
+    const price =
+        document.getElementById("price");
+
+    price.innerHTML = "";
+
+    if(service === "Kanak Kanak") {
+
+        price.innerHTML = `
+            <option value="10">RM10</option>
+            <option value="15">RM15</option>
+        `;
+    }
+
+    else if(service === "Remaja/Budak Sekolah") {
+
+        price.innerHTML = `
+            <option value="15">RM15</option>
+            <option value="20">RM20</option>
+            <option value="25">RM25</option>
+        `;
+    }
+
+   else if(service === "Dewasa") {
+
+    price.innerHTML = `
+        <option value="20">RM20</option>
+        <option value="25">RM25</option>
+        <option value="30">RM30</option>
+        <option value="35">RM35</option>
+    `;
+}
+
+
+}
+
+</script>
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+</div>
+
+<div class="form-container">
+
+    <h2 class="form-title">
+        New Sale
+    </h2>
+
+    <form
+    method="POST"
+    enctype="multipart/form-data">
+
+        
+        <div class="input-group">
+
+    <label>Service</label>
+
+    <select name="service" id="service" required onchange="updatePrices()">
+
+        <option value="">Select Service</option>
+
+        <option value="Kanak Kanak">
+            Kanak Kanak
+        </option>
+
+        <option value="Remaja/Budak Sekolah">
+            Remaja/Budak Sekolah
+        </option>
+
+        <option value="Dewasa">
+            Dewasa
+        </option>
+
+    </select>
+
+</div>
+        <div class="input-group">
+
+    <label>Price (RM)</label>
+
+    <select name="amount" id="price" required>
+
+        <option value="">
+            Select Service First
+        </option>
+
+    </select>
+
+<div class="input-group">
+
+    <label>Payment Method</label>
+
+    <select
+        name="payment_method"
+        id="payment_method"
+        required
+        onchange="toggleReceipt()">
+
+        <option value="Cash">
+            Cash
+        </option>
+
+        <option value="QR">
+            QR
+        </option>
+
+    </select>
+
+</div>
+<div
+class="input-group"
+id="receipt-upload"
+style="display:none;">
+
+    <label>QR Payment Receipt</label>
+
+    <input
+        type="file"
+        name="receipt"
+        accept="image/*"
+        capture="environment">
+
+</div>
+</div>
+
+        <div class="input-group">
+
+            <label>Barber</label>
+
+            <select name="barber">
+
+                {% for barber in barbers %}
+
+                <option value="{{ barber.id }}">
+                    {{ barber.name }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+<div class="input-group">
+
+    <label>Transaction Date & Time</label>
+
+    <input
+        type="datetime-local"
+        name="transaction_date"
+        value="{{ current_datetime }}"
+        required>
+
+</div>
+        <button
+        class="save-btn"
+        type="submit">
+
+            Save Sale
+
+        </button>
+
+    </form>
+
+    <a href="/"
+    class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+</div>
+<script>
+
+function toggleReceipt(){
+
+    const payment =
+        document.getElementById(
+            "payment_method"
+        ).value;
+
+    const receipt =
+        document.getElementById(
+            "receipt-upload"
+        );
+
+    if(payment === "QR"){
+
+        receipt.style.display =
+        "block";
+
+    }
+    else{
+
+        receipt.style.display =
+        "none";
+
+    }
+
+}
+
+toggleReceipt();
+
+</script>
+</body>
+</html>

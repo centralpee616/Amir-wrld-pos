@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Daily Report</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+</div>
+
+<div class="form-container">
+
+    <h2 class="form-title">
+
+        Select Date
+
+    </h2>
+
+    <form action="/daily-report/view"
+    method="POST">
+
+        <div class="input-group">
+
+            <label>Date</label>
+
+            <input
+            type="date"
+            name="date"
+            required>
+
+        </div>
+
+        <button
+        class="save-btn"
+        type="submit">
+
+            View Report
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

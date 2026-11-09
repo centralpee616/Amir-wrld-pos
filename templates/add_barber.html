@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Add Barber</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+</div>
+
+<div class="form-container">
+
+    <h2 class="form-title">
+        Add Barber
+    </h2>
+
+    <form method="POST">
+
+        <div class="input-group">
+
+            <label>Barber Name</label>
+
+            <input
+            type="text"
+            name="name"
+            required>
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Commission (%)</label>
+
+            <input
+            type="number"
+            name="commission"
+            required>
+
+        </div>
+
+        <button
+        class="save-btn"
+        type="submit">
+
+            Save Barber
+
+        </button>
+
+    </form>
+
+    <a href="/"
+    class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+</div>
+
+</body>
+</html>

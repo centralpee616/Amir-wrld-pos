@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AMIR WRLD</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+
+<div class="header">
+
+    <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        class="logo">
+
+    <p class="subtitle">
+        Management System
+    </p>
+
+</div>
+<div class="stats-grid">
+
+    
+
+    <div class="card">
+
+        <div class="card-title">
+            TODAY'S<br>SALES
+        </div>
+
+        <div class="card-value">
+            RM {{ today_total }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            TODAY'S HAIRCUTS
+        </div>
+
+        <div class="card-value">
+            {{ today_count }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            MONTHLY SALES
+        </div>
+
+        <div class="card-value">
+            RM {{ month_total }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            MONTHLY HAIRCUTS
+        </div>
+
+        <div class="card-value">
+            {{ month_count }}
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<div class="actions">
+
+    <a href="/add-sale" class="btn">
+        + Add Sale
+    </a>
+
+    <a href="/add-barber" class="btn">
+        + Add Barber
+    </a>
+
+    <a href="/report" class="btn">
+        Barber Report
+    </a>
+
+    <a href="/daily-report" class="btn">
+        Daily Report
+    </a>
+
+    <a href="/monthly-report" class="btn">
+        Monthly Report
+    </a>
+
+</div>
+
+<div class="transactions">
+
+    <h2>Recent Transactions</h2>
+
+    {% for sale in sales %}
+
+    <div class="transaction-card">
+
+        <div class="transaction-top">
+
+            <div>
+
+                <h3>{{ sale.service }}</h3>
+
+                <small>
+                    {{ sale.date.strftime('%d %b %Y %I:%M %p') }}
+                </small>
+
+            </div>
+
+            <div class="amount-tag">
+
+                RM {{ sale.amount }}
+
+            </div>
+
+        </div>
+
+        <div class="transaction-details">
+
+            <p>
+                Barber:
+                <b>{{ sale.barber.name }}</b>
+            </p>
+
+            <p>
+                Payment:
+                <b>{{ sale.payment_method }}</b>
+            </p>
+
+            <p>
+                Commission:
+                <b>RM {{ sale.commission }}</b>
+            </p>
+
+            <p>
+                Receipt:
+                <b>{{ sale.receipt_no }}</b>
+            </p>
+
+        </div>
+
+        <div class="transaction-buttons">
+
+    <a
+    href="/receipt/{{ sale.id }}"
+    class="btn">
+
+        📄 Receipt
+
+    </a>
+
+    {% if sale.receipt_image %}
+
+    <a
+    href="/uploads/{{ sale.receipt_image }}"
+    target="_blank"
+    class="btn">
+
+        🖼 Image Receipt
+
+    </a>
+
+    {% else %}
+
+    <span class="btn">
+
+        No Image
+
+    </span>
+
+    {% endif %}
+
+    <a
+    href="/edit-sale/{{ sale.id }}"
+    class="btn">
+
+        ✏ Edit
+
+    </a>
+
+    <a
+    href="/delete-sale/{{ sale.id }}"
+    class="btn"
+    onclick="return confirm('Delete this transaction?')">
+
+        🗑 Delete
+
+    </a>
+
+</div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</div>
+<div class="bottom-nav">
+
+    <a href="/">
+        Dashboard
+    </a>
+
+    <a href="/add-sale">
+        Add Sale
+    </a>
+
+    <a href="/report">
+        Reports
+    </a>
+
+    <a href="/monthly-report">
+        Monthly
+    </a>
+
+</div>
+</body>
+</html>

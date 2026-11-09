@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<h2>
+
+Selected Month:
+{{ selected_month }}
+
+</h2>
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Monthly Report</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>AMIR WRLD</h1>
+
+    <p>Monthly Report</p>
+
+</div>
+
+<div class="card">
+
+    <div class="card-title">
+        MONTHLY SALES
+    </div>
+
+    <div class="card-value">
+        RM {{ total }}
+    </div>
+<h2 style="margin-top:30px;">
+    Barber Performance
+</h2>
+
+{% for barber in barber_data %}
+
+<div class="report-card">
+
+    <div class="report-name">
+
+        {{ barber.name }}
+
+    </div>
+
+    <div class="report-grid">
+
+        <div class="report-stat">
+
+            <small>Sales</small>
+
+            <h2>
+                RM {{ barber.sales }}
+            </h2>
+
+        </div>
+
+        <div class="report-stat">
+
+            <small>Commission</small>
+
+            <h2>
+                RM {{ barber.commission }}
+            </h2>
+
+        </div>
+
+        <div class="report-stat">
+
+            <small>Haircuts</small>
+
+            <h2>
+                {{ barber.cuts }}
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+</div>
+
+<div class="transactions">
+
+    <table>
+
+        <tr>
+            <th>Date/Time</th>
+            <th>Service</th>
+            <th>Barber</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for sale in sales %}
+
+        <tr>
+            <td>
+                {{ sale.date.strftime('%d/%m/%Y %H:%M') }}
+            </td>
+            <td>{{ sale.service }}</td>
+            <td>{{ sale.barber.name }}</td>
+            <td>RM {{ sale.amount }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+<br>
+
+<a href="/" class="btn">
+    Dashboard
+</a>
+
+</body>
+
+</html>
