@@ -574,9 +574,11 @@ def export_sales():
 
     workbook = openpyxl.Workbook()
 
-    sheet = workbook.active
+    # SALES SHEET
 
-    sheet.title = "Sales"
+    sales_sheet = workbook.active
+
+    sales_sheet.title = "Sales"
 
     headers = [
         "Date",
@@ -585,15 +587,25 @@ def export_sales():
         "Barber",
         "Payment Method",
         "Amount",
-        "Commission"
+        "Commission",
+        "Receipt Image"
     ]
 
     for col_num, header in enumerate(headers, 1):
 
-        sheet.cell(
+        sales_sheet.cell(
             row=1,
             column=col_num
         ).value = header
+
+        sales_sheet.cell(
+    row=row_num,
+    column=8
+).value = (
+    sale.receipt_image
+    if sale.receipt_image
+    else "No Image"
+)
 
     sales = Sale.query.order_by(
         Sale.date.desc()
@@ -603,54 +615,123 @@ def export_sales():
 
     for sale in sales:
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=1
         ).value = sale.date.strftime(
             "%d/%m/%Y %H:%M"
         )
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=2
         ).value = sale.receipt_no
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=3
         ).value = sale.service
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=4
         ).value = sale.barber.name
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=5
         ).value = sale.payment_method
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=6
         ).value = sale.amount
 
-        sheet.cell(
+        sales_sheet.cell(
             row=row_num,
             column=7
         ).value = sale.commission
 
         row_num += 1
 
+    # BARBERS SHEET
+
+    barber_sheet = workbook.create_sheet(
+        "Barbers"
+    )
+
+    barber_sheet.cell(
+        1,
+        1
+    ).value = "Name"
+
+    barber_sheet.cell(
+        1,
+        2
+    ).value = "Commission %"
+
+    barbers = Barber.query.order_by(
+        Barber.name
+    ).all()
+
+    row_num = 2
+
+    for barber in barbers:
+
+        barber_sheet.cell(
+            row_num,
+            1
+        ).value = barber.name
+
+        barber_sheet.cell(
+            row_num,
+            2
+        ).value = barber.commission_rate
+
+        row_num += 1
+
+    # SUMMARY SHEET
+
+    summary_sheet = workbook.create_sheet(
+        "Summary"
+    )
+
+    summary_sheet["A1"] = "Total Sales"
+
+    summary_sheet["B1"] = sum(
+        sale.amount
+        for sale in sales
+    )
+
+    summary_sheet["A2"] = "Total Haircuts"
+
+    summary_sheet["B2"] = len(
+        sales
+    )
+
+    summary_sheet["A3"] = "Total Commission"
+
+    summary_sheet["B3"] = sum(
+        sale.commission
+        for sale in sales
+    )
+
+    # DOWNLOAD
+
     output = BytesIO()
 
-    workbook.save(output)
+    workbook.save(
+        output
+    )
 
-    output.seek(0)
+    output.seek(
+        0
+    )
 
     return send_file(
         output,
-        download_name="AMIR_WRLD_Sales.xlsx",
+        download_name=
+        "AMIR_WRLD_Backup.xlsx",
         as_attachment=True
     ) 
 
