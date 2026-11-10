@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request, redirect
+from flask import send_file
+import openpyxl
+from io import BytesIO
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date, timedelta
 
@@ -566,7 +569,90 @@ def delete_barber(id):
 
     return redirect('/barbers')
 
-   
+@app.route('/export-sales')
+def export_sales():
+
+    workbook = openpyxl.Workbook()
+
+    sheet = workbook.active
+
+    sheet.title = "Sales"
+
+    headers = [
+        "Date",
+        "Receipt No",
+        "Service",
+        "Barber",
+        "Payment Method",
+        "Amount",
+        "Commission"
+    ]
+
+    for col_num, header in enumerate(headers, 1):
+
+        sheet.cell(
+            row=1,
+            column=col_num
+        ).value = header
+
+    sales = Sale.query.order_by(
+        Sale.date.desc()
+    ).all()
+
+    row_num = 2
+
+    for sale in sales:
+
+        sheet.cell(
+            row=row_num,
+            column=1
+        ).value = sale.date.strftime(
+            "%d/%m/%Y %H:%M"
+        )
+
+        sheet.cell(
+            row=row_num,
+            column=2
+        ).value = sale.receipt_no
+
+        sheet.cell(
+            row=row_num,
+            column=3
+        ).value = sale.service
+
+        sheet.cell(
+            row=row_num,
+            column=4
+        ).value = sale.barber.name
+
+        sheet.cell(
+            row=row_num,
+            column=5
+        ).value = sale.payment_method
+
+        sheet.cell(
+            row=row_num,
+            column=6
+        ).value = sale.amount
+
+        sheet.cell(
+            row=row_num,
+            column=7
+        ).value = sale.commission
+
+        row_num += 1
+
+    output = BytesIO()
+
+    workbook.save(output)
+
+    output.seek(0)
+
+    return send_file(
+        output,
+        download_name="AMIR_WRLD_Sales.xlsx",
+        as_attachment=True
+    ) 
 
 
 if __name__ == "__main__":
