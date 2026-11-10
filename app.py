@@ -765,6 +765,20 @@ def export_sales():
     ) 
 
 
+@app.route('/delete-sale/<int:id>')
+def delete_sale(id):
+
+    sale = db.get_or_404(
+        Sale,
+        id
+    )
+
+    db.session.delete(sale)
+
+    db.session.commit()
+
+    return redirect('/')
+
 if __name__ == "__main__":
 
     with app.app_context():
