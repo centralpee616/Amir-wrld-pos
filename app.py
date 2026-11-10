@@ -37,6 +37,9 @@ class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer = db.Column(db.String(100))
     service = db.Column(db.String(100))
+    custom_description = db.Column(
+    db.String(255)
+)
     amount = db.Column(db.Float)
     commission = db.Column(db.Float)
     date = db.Column(
@@ -132,14 +135,29 @@ def add_sale():
     if request.method == "POST":
 
         barber = db.session.get(
-    Barber,
-    int(request.form['barber'])
-)
+            Barber,
+            int(request.form['barber'])
+        )
 
-        amount = float(
-            request.form['amount']
-        )    
-        
+        if request.form['service'] == "Custom":
+
+            amount = float(
+                request.form['custom_amount']
+            )
+
+            service_name = request.form[
+                'custom_description'
+            ]
+
+        else:
+
+            amount = float(
+                request.form['amount']
+            )
+
+            service_name = request.form[
+                'service'
+            ]
 
         selected_date = datetime.strptime(
             request.form['transaction_date'],
@@ -152,15 +170,19 @@ def add_sale():
         ) / 100
 
         receipt_no = (
-    "AW-" +
-    malaysia_time().strftime("%d%m%y-%H%M%S")
-)
+            "AW-" +
+            malaysia_time().strftime(
+                "%d%m%y-%H%M%S"
+            )
+        )
 
         receipt_image = None
 
         if request.form['payment_method'] == "QR":
 
-            file = request.files.get('receipt')
+            file = request.files.get(
+                'receipt'
+            )
 
             if file and file.filename != "":
 
@@ -178,7 +200,9 @@ def add_sale():
 
                     file.save(
                         os.path.join(
-                            app.config['UPLOAD_FOLDER'],
+                            app.config[
+                                'UPLOAD_FOLDER'
+                            ],
                             filename
                         )
                     )
@@ -191,10 +215,12 @@ def add_sale():
                     print(e)
 
         sale = Sale(
-            service=request.form['service'],
+            service=service_name,
             amount=amount,
             commission=commission,
-            payment_method=request.form['payment_method'],
+            payment_method=request.form[
+                'payment_method'
+            ],
             receipt_no=receipt_no,
             receipt_image=receipt_image,
             date=selected_date,
@@ -209,11 +235,13 @@ def add_sale():
     return render_template(
         'add_sale.html',
         barbers=barbers,
-
         current_datetime=(
-    datetime.utcnow() +
-    timedelta(hours=8)
-).strftime('%Y-%m-%dT%H:%M') )
+            datetime.utcnow()
+            + timedelta(hours=8)
+        ).strftime(
+            '%Y-%m-%dT%H:%M'
+        )
+    )
 
 @app.route('/report')
 def report():
@@ -410,31 +438,45 @@ def monthly_report_view():
 def edit_sale(id):
 
     sale = db.get_or_404(
-    Sale,
-    id
-)
+        Sale,
+        id
+    )
 
     barbers = Barber.query.all()
 
     if request.method == "POST":
 
         barber = db.session.get(
-    Barber,
-    int(request.form['barber'])
-)
-
-        amount = float(
-            request.form['amount']
+            Barber,
+            int(request.form['barber'])
         )
 
-        
+        if request.form['service'] == "Custom":
+
+            amount = float(
+                request.form['custom_amount']
+            )
+
+            service_name = request.form[
+                'custom_description'
+            ]
+
+        else:
+
+            amount = float(
+                request.form['amount']
+            )
+
+            service_name = request.form[
+                'service'
+            ]
 
         commission = (
             amount *
             barber.commission_rate
         ) / 100
 
-        sale.service = request.form['service']
+        sale.service = service_name
         sale.amount = amount
         sale.commission = commission
         sale.barber = barber
@@ -448,19 +490,6 @@ def edit_sale(id):
         sale=sale,
         barbers=barbers
     )
-@app.route('/delete-sale/<int:id>')
-def delete_sale(id):
-
-    sale = db.get_or_404(
-    Sale,
-    id
-)
-
-    db.session.delete(sale)
-
-    db.session.commit()
-
-    return redirect('/')
 
 @app.route('/receipt/<int:id>')
 def receipt(id):
@@ -740,6 +769,8 @@ if __name__ == "__main__":
 
     with app.app_context():
         db.create_all()
+
+
 
     app.run(
     host="0.0.0.0",
