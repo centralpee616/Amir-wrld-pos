@@ -61,12 +61,9 @@ def home():
         Sale.date.desc()
     ).all()
 
-    today = date.today()
+    recent_sales = sales[:3]
 
-    today_sales = [
-        s for s in sales
-        if s.date.date() == today
-    ]
+    today = date.today()
 
     current_month = datetime.now().month
     current_year = datetime.now().year
@@ -91,7 +88,7 @@ def home():
 
     return render_template(
     'index.html',
-    sales=sales,
+    sales=recent_sales,
     today_total=today_total,
     month_total=month_total,
     today_count=len(today_sales),
@@ -471,6 +468,18 @@ def time_test():
 
     return str(
         malaysia_time()
+    )
+
+@app.route('/transactions')
+def all_transactions():
+
+    sales = Sale.query.order_by(
+        Sale.date.desc()
+    ).all()
+
+    return render_template(
+        'transactions.html',
+        sales=sales
     )
 
 if __name__ == "__main__":

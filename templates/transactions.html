@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+
+    <title>All Transactions</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>All Transactions</h1>
+
+</div>
+
+<div class="transactions">
+
+    {% for sale in sales %}
+
+    <div class="transaction-card">
+
+        <div class="transaction-top">
+
+            <div>
+
+                <h3>{{ sale.service }}</h3>
+
+                <small>
+                    {{ sale.date.strftime('%d %b %Y %I:%M %p') }}
+                </small>
+
+            </div>
+
+            <div class="amount-tag">
+
+                RM {{ sale.amount }}
+
+            </div>
+
+        </div>
+
+        <div class="transaction-details">
+
+            <p>
+                Barber:
+                <b>{{ sale.barber.name }}</b>
+            </p>
+
+            <p>
+                Payment:
+                <b>{{ sale.payment_method }}</b>
+            </p>
+
+            <p>
+                Commission:
+                <b>RM {{ sale.commission }}</b>
+            </p>
+
+            <p>
+                Receipt:
+                <b>{{ sale.receipt_no }}</b>
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<a href="/" class="back-btn">
+
+    ← Back To Dashboard
+
+</a>
+
+</body>
+
+</html>
