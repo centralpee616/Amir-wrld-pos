@@ -65,6 +65,11 @@ def home():
 
     today = date.today()
 
+    today_sales = [
+        s for s in sales
+        if s.date.date() == today
+    ]
+
     current_month = datetime.now().month
     current_year = datetime.now().year
 
@@ -87,14 +92,14 @@ def home():
     )
 
     return render_template(
-    'index.html',
-    sales=recent_sales,
-    today_total=today_total,
-    month_total=month_total,
-    today_count=len(today_sales),
-    month_count=len(month_sales),
-    total_commission=total_commission
-)
+        'index.html',
+        sales=recent_sales,
+        today_total=today_total,
+        month_total=month_total,
+        today_count=len(today_sales),
+        month_count=len(month_sales),
+        total_commission=total_commission
+    )
 
 @app.route('/add-barber', methods=['GET','POST'])
 def add_barber():
