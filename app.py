@@ -15,7 +15,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 import os
 from werkzeug.utils import secure_filename
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+import os
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL',
+    'sqlite:///database.db'
+)
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Barber(db.Model):
