@@ -71,6 +71,58 @@
 
         </div>
 
+        <div class="transaction-buttons">
+
+    <a
+    href="/receipt/{{ sale.id }}"
+    class="btn">
+
+        📄 Receipt
+
+    </a>
+
+    {% if sale.receipt_image %}
+
+    <a
+    href="/uploads/{{ sale.receipt_image }}"
+    target="_blank"
+    class="btn">
+
+        🖼 Image Receipt
+
+    </a>
+
+    {% else %}
+
+    <span class="btn">
+
+        No Image
+
+    </span>
+
+    {% endif %}
+
+    <a
+    href="/edit-sale/{{ sale.id }}"
+    class="btn">
+
+        ✏ Edit
+
+    </a>
+
+    <a
+    href="/delete-sale/{{ sale.id }}"
+    class="btn"
+    onclick="return confirm('Delete this transaction?')">
+
+        🗑 Delete
+
+    </a>
+
+</div>
+
+
+
     </div>
 
     {% endfor %}

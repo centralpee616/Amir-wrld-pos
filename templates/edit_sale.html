@@ -66,8 +66,11 @@ function updatePrices() {
 
 }
 
-updatePrices();
+window.onload = function(){
 
+    updatePrices();
+
+}
 </script>
 <body>
 
@@ -119,11 +122,15 @@ updatePrices();
     <label>Price</label>
 
     <select
-        name="amount"
-        id="price"
-        required>
+    name="amount"
+    id="price"
+    required>
 
-    </select>
+    <option value="{{ sale.amount }}">
+        RM {{ sale.amount }}
+    </option>
+
+</select>
 
 </div>
 

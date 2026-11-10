@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+
+    <title>Manage Barbers</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>Manage Barbers</h1>
+
+</div>
+
+<div class="transactions">
+
+    {% for barber in barbers %}
+
+    <div class="transaction-card">
+
+        <h3>{{ barber.name }}</h3>
+
+        <p>
+            Commission:
+            <b>{{ barber.commission_rate }}%</b>
+        </p>
+
+        <div class="transaction-buttons">
+
+            <a
+            href="/edit-barber/{{ barber.id }}"
+            class="btn">
+
+                ✏ Edit
+
+            </a>
+
+            <a
+            href="/delete-barber/{{ barber.id }}"
+            class="btn"
+            onclick="return confirm('Delete this barber?')">
+
+                🗑 Delete
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<a href="/" class="back-btn">
+
+    ← Back To Dashboard
+
+</a>
+
+</body>
+
+</html>

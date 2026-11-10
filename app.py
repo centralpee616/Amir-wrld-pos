@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+
 def malaysia_time():
-    return datetime.now()
+
+    return datetime.utcnow() + timedelta(hours=8)
 
 app = Flask(__name__)
 
@@ -15,7 +16,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 import os
 from werkzeug.utils import secure_filename
 
-import os
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
     'DATABASE_URL',
@@ -70,9 +70,10 @@ def home():
         if s.date.date() == today
     ]
 
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    now = malaysia_time()
 
+    current_month = now.month
+    current_year = now.year
     month_sales = [
         s for s in sales
         if s.date.month == current_month
@@ -127,13 +128,15 @@ def add_sale():
 
     if request.method == "POST":
 
-        barber = Barber.query.get(
-            int(request.form['barber'])
-        )
+        barber = db.session.get(
+    Barber,
+    int(request.form['barber'])
+)
 
         amount = float(
             request.form['amount']
-        )
+        )    
+        
 
         selected_date = datetime.strptime(
             request.form['transaction_date'],
@@ -146,9 +149,9 @@ def add_sale():
         ) / 100
 
         receipt_no = (
-            "AW-" +
-            datetime.now().strftime("%d%m%y-%H%M%S")
-        )
+    "AW-" +
+    malaysia_time().strftime("%d%m%y-%H%M%S")
+)
 
         receipt_image = None
 
@@ -203,11 +206,15 @@ def add_sale():
     return render_template(
         'add_sale.html',
         barbers=barbers,
-        current_datetime=datetime.now().strftime('%Y-%m-%dT%H:%M')
-    )
+
+        current_datetime=(
+    datetime.utcnow() +
+    timedelta(hours=8)
+).strftime('%Y-%m-%dT%H:%M') )
 
 @app.route('/report')
 def report():
+
 
     return render_template(
         'barber_report_select.html'
@@ -399,24 +406,25 @@ def monthly_report_view():
 @app.route('/edit-sale/<int:id>', methods=['GET', 'POST'])
 def edit_sale(id):
 
-    sale = Sale.query.get_or_404(id)
+    sale = db.get_or_404(
+    Sale,
+    id
+)
 
     barbers = Barber.query.all()
 
     if request.method == "POST":
 
-        barber = Barber.query.get(
-            int(request.form['barber'])
-        )
+        barber = db.session.get(
+    Barber,
+    int(request.form['barber'])
+)
 
         amount = float(
             request.form['amount']
         )
 
-        selected_date = datetime.strptime(
-    request.form['transaction_date'],
-    '%Y-%m-%dT%H:%M'
-)
+        
 
         commission = (
             amount *
@@ -440,7 +448,10 @@ def edit_sale(id):
 @app.route('/delete-sale/<int:id>')
 def delete_sale(id):
 
-    sale = Sale.query.get_or_404(id)
+    sale = db.get_or_404(
+    Sale,
+    id
+)
 
     db.session.delete(sale)
 
@@ -451,7 +462,10 @@ def delete_sale(id):
 @app.route('/receipt/<int:id>')
 def receipt(id):
 
-    sale = Sale.query.get_or_404(id)
+    sale = db.get_or_404(
+    Sale,
+    id
+)
 
     return render_template(
         'receipt.html',
@@ -486,6 +500,74 @@ def all_transactions():
         'transactions.html',
         sales=sales
     )
+
+@app.route('/barbers')
+def manage_barbers():
+
+    barbers = Barber.query.order_by(
+        Barber.name
+    ).all()
+
+    return render_template(
+        'barbers.html',
+        barbers=barbers
+    )
+
+
+@app.route('/edit-barber/<int:id>',
+methods=['GET', 'POST'])
+def edit_barber(id):
+
+    barber = db.get_or_404(
+    Barber,
+    id
+)
+
+    if request.method == "POST":
+
+        barber.name = request.form['name']
+
+        barber.commission_rate = float(
+            request.form['commission']
+        )
+
+        db.session.commit()
+
+        return redirect('/barbers')
+
+    return render_template(
+        'edit_barber.html',
+        barber=barber
+    )
+
+
+@app.route('/delete-barber/<int:id>')
+def delete_barber(id):
+
+    barber = db.get_or_404(
+    Barber,
+    id
+)
+
+    sales_count = Sale.query.filter_by(
+        barber_id=barber.id
+    ).count()
+
+    if sales_count > 0:
+
+        return (
+            f"Cannot delete {barber.name}. "
+            "This barber has sales records."
+        )
+
+    db.session.delete(barber)
+
+    db.session.commit()
+
+    return redirect('/barbers')
+
+   
+
 
 if __name__ == "__main__":
 

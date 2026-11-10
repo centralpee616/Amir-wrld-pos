@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+
+    <title>Edit Barber</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h2>Edit Barber</h2>
+
+    <form method="POST">
+
+        <div class="input-group">
+
+            <label>Name</label>
+
+            <input
+            type="text"
+            name="name"
+            value="{{ barber.name }}"
+            required>
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Commission %</label>
+
+            <input
+            type="number"
+            step="0.01"
+            name="commission"
+            value="{{ barber.commission_rate }}"
+            required>
+
+        </div>
+
+        <button
+        class="save-btn"
+        type="submit">
+
+            Save Changes
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
