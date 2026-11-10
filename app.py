@@ -37,9 +37,7 @@ class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer = db.Column(db.String(100))
     service = db.Column(db.String(100))
-    custom_description = db.Column(
-    db.String(255)
-)
+   
     amount = db.Column(db.Float)
     commission = db.Column(db.Float)
     date = db.Column(
@@ -627,14 +625,7 @@ def export_sales():
             column=col_num
         ).value = header
 
-        sales_sheet.cell(
-    row=row_num,
-    column=8
-).value = (
-    sale.receipt_image
-    if sale.receipt_image
-    else "No Image"
-)
+       
 
     sales = Sale.query.order_by(
         Sale.date.desc()
@@ -680,6 +671,15 @@ def export_sales():
             row=row_num,
             column=7
         ).value = sale.commission
+
+        sales_sheet.cell(
+    row=row_num,
+    column=8
+).value = (
+    sale.receipt_image
+    if sale.receipt_image
+    else "No Image"
+)
 
         row_num += 1
 
