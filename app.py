@@ -156,24 +156,31 @@ def add_sale():
 
             if file and file.filename != "":
 
-                filename = secure_filename(
-                    file.filename
-                )
+                try:
 
-                filename = (
-                    receipt_no +
-                    "_" +
-                    filename
-                )
+                    filename = secure_filename(
+                        file.filename
+                    )
 
-                file.save(
-                    os.path.join(
-                        app.config['UPLOAD_FOLDER'],
+                    filename = (
+                        receipt_no +
+                        "_" +
                         filename
                     )
-                )
 
-                receipt_image = filename
+                    file.save(
+                        os.path.join(
+                            app.config['UPLOAD_FOLDER'],
+                            filename
+                        )
+                    )
+
+                    receipt_image = filename
+
+                except Exception as e:
+
+                    print("UPLOAD ERROR:")
+                    print(e)
 
         sale = Sale(
             service=request.form['service'],
