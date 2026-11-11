@@ -20,12 +20,24 @@ import os
 from werkzeug.utils import secure_filename
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'DATABASE_URL',
-    'sqlite:///database.db'
-)
+database_url = os.environ.get('DATABASE_URL')
 
+if not database_url:
+    raise RuntimeError(
+        "DATABASE_URL is missing. "
+        "The app cannot start without PostgreSQL."
+    )
+
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace(
+        'postgres://',
+        'postgresql://',
+        1
+    )
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 class Barber(db.Model):
@@ -779,16 +791,12 @@ def delete_sale(id):
 
     return redirect('/')
 
+with app.app_context():
+    db.create_all()
+
 if __name__ == "__main__":
-
-    with app.app_context():
-        db.create_all()
-
-
-
     app.run(
-    host="0.0.0.0",
-    port=5000
-)
-
+        host="0.0.0.0",
+        port=5000
+    )
     
