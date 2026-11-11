@@ -608,10 +608,157 @@ def delete_barber(id):
 
     return redirect('/barbers')
 
-@app.route('/export-sales')
-def export_sales():
+@app.route('/import-sales', methods=['GET', 'POST'])
+def import_sales():
 
-    workbook = openpyxl.Workbook()
+    if request.method == "POST":
+
+        file = request.files.get('backup_file')
+
+        if not file or file.filename == "":
+            return "No backup file selected."
+
+        try:
+
+            workbook = openpyxl.load_workbook(
+                file,
+                data_only=True
+            )
+
+            barber_sheet = workbook["Barbers"]
+
+            for row in barber_sheet.iter_rows(
+                min_row=2,
+                values_only=True
+            ):
+
+                barber_name = row[0]
+                commission_rate = row[1]
+
+                if not barber_name:
+                    continue
+
+                barber = Barber.query.filter_by(
+                    name=barber_name
+                ).first()
+
+                if barber:
+
+                    barber.commission_rate = float(
+                        commission_rate
+                    )
+
+                else:
+
+                    barber = Barber(
+                        name=barber_name,
+                        commission_rate=float(
+                            commission_rate
+                        )
+                    )
+
+                    db.session.add(barber)
+
+            db.session.flush()
+
+            sales_sheet = workbook["Sales"]
+
+            imported = 0
+            skipped = 0
+
+            for row in sales_sheet.iter_rows(
+                min_row=2,
+                values_only=True
+            ):
+
+                (
+                    sale_date,
+                    receipt_no,
+                    service,
+                    barber_name,
+                    payment_method,
+                    amount,
+                    commission,
+                    receipt_image
+                ) = row
+
+                if not receipt_no:
+                    continue
+
+                existing_sale = Sale.query.filter_by(
+                    receipt_no=receipt_no
+                ).first()
+
+                if existing_sale:
+                    skipped += 1
+                    continue
+
+                barber = Barber.query.filter_by(
+                    name=barber_name
+                ).first()
+
+                if not barber:
+
+                    barber = Barber(
+                        name=barber_name,
+                        commission_rate=0
+                    )
+
+                    db.session.add(barber)
+                    db.session.flush()
+
+                if isinstance(sale_date, str):
+
+                    sale_date = datetime.strptime(
+                        sale_date,
+                        "%d/%m/%Y %H:%M"
+                    )
+
+                sale = Sale(
+                    service=service,
+                    amount=float(amount),
+                    commission=float(commission),
+                    payment_method=payment_method,
+                    receipt_no=receipt_no,
+                    receipt_image=(
+                        None
+                        if receipt_image == "No Image"
+                        else receipt_image
+                    ),
+                    date=sale_date,
+                    barber=barber
+                )
+
+                db.session.add(sale)
+                imported += 1
+
+            db.session.commit()
+
+            return (
+                f"Import complete. "
+                f"{imported} sales imported. "
+                f"{skipped} duplicate sales skipped."
+            )
+
+        except Exception as e:
+
+            db.session.rollback()
+
+            return (
+                "Import failed: "
+                + str(e)
+            )
+
+    return render_template(
+        'import_sales.html'
+    )
+
+
+
+    @app.route('/export-sales')
+    def export_sales():
+
+        workbook = openpyxl.Workbook()
 
     # SALES SHEET
 
